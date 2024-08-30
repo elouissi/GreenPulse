@@ -37,7 +37,7 @@ public class User {
 
 
     public String toString() {
-        return "ID: " + id + ", Nom: " + name + ", Âge: " + age;
+        return "ID: " + id + ", Nom: " + name + ", Age: " + age;
     }
 }
 
