@@ -13,6 +13,7 @@ public class Main {
         int choix;
         Scanner scanner = new Scanner(System.in);
         HashMap<Integer, User> users = new HashMap<>();
+        long consommationParJour = 0;
 
         do {
             System.out.println("-----------------------//veuillez selectionner votre choix//--------------");
@@ -21,8 +22,9 @@ public class Main {
             System.out.println("3 - Supprimer un utilisateur");
             System.out.println("4 - Afficher tous les utilisateurs");
             System.out.println("5 - entrer la consomation d'un utilisateur ");
-            System.out.println("6 - afficcher la consomation d'un utilisateur");
-            System.out.println("7 - Exit");
+            System.out.println("6 - afficher la consomation d'un utilisateur");
+            System.out.println("7- générer le rapport d'un utilisateur");
+            System.out.println("8 - Exit");
 
             choix = scanner.nextInt();
             scanner.nextLine();
@@ -134,7 +136,7 @@ public class Main {
                             if (difference == 0) {
                                 System.out.println("Erreur : La date de début et la date de fin sont identiques.");
                             } else {
-                                double consommationParJour = (double) valeur / difference;
+                                  consommationParJour =  valeur / difference;
                                 System.out.println("Nombre de jours de différence: " + difference);
                                 System.out.println("Consommation par jour : " + consommationParJour);
 
@@ -182,6 +184,20 @@ public class Main {
                     break;
 
                 case 7:
+
+                    System.out.println("s'il vous plait choisir l'utilisateur que vous voulez");
+                    int slectedId = scanner.nextInt();
+                    scanner.nextLine();
+
+
+                            long consomationParSemaine = consommationParJour * 7;
+                            long consommationParMois = consomationParSemaine * 4;
+                            long consommationParAnnée = consommationParMois * 4;
+                            System.out.println("/------------------------------------------------------------------------/");
+                            System.out.println("/--Par Jour  -------- Par Semaine ------  Par Mois   --------  Par Année /");
+                            System.out.println("/--"+consommationParJour+"------" + consomationParSemaine +"----"+consommationParMois+"-----"+consommationParAnnée+"--/" );
+
+
                     break;
 
                 case 8:
@@ -193,7 +209,7 @@ public class Main {
                     System.out.println("Choix invalide. Veuillez réessayer.");
             }
 
-        } while (choix != 7) ;
+        } while (choix != 8) ;
 
     }
 
