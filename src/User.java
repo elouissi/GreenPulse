@@ -1,17 +1,28 @@
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class User {
         private int id;
         private String name;
         private int age;
+        private ArrayList<Consomation> consomationList = new ArrayList<>();
         User(int id, String name, int age){
 
             this.id = id;
             this.name = name;
             this.age = age;
+            this.consomationList = new ArrayList<>();
+
         }
-        public int getId() {
+
+    public User() {
+
+    }
+
+    public int getId() {
             return id;
         }
 
@@ -36,8 +47,15 @@ public class User {
         }
 
 
+
     public String toString() {
         return "ID: " + id + ", Nom: " + name + ", Age: " + age;
+    }
+    public void AddCarbon(Consomation consomation){
+        consomationList.add(consomation);
+    }
+    public List<Consomation> getConsommations() {
+        return consomationList;
     }
 }
 

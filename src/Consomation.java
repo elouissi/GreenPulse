@@ -1,14 +1,17 @@
 import java.time.LocalDate;
 
-public class Consamation {
+public class Consomation {
     LocalDate StartDate;
     LocalDate EndDate;
     float valueOfCarbon;
 
-    public Consamation(LocalDate startDate, LocalDate endDate, float value) {
+    public Consomation(LocalDate startDate, LocalDate endDate, float value) {
         StartDate = startDate;
         EndDate = endDate;
         this.valueOfCarbon = value;
+    }
+
+    public Consomation() {
     }
 
     public LocalDate getStartDate() {
@@ -33,5 +36,13 @@ public class Consamation {
 
     public void setValueOfCarbon(float valueOfCarbon) {
         this.valueOfCarbon = valueOfCarbon;
+    }
+
+    public String toString() {
+        return "Consomation{" +
+                "startDate=" + StartDate +
+                ", endDate=" + EndDate +
+                ", valeur=" + valueOfCarbon + "kg" +
+                '}';
     }
 }
