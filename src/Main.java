@@ -14,6 +14,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         HashMap<Integer, User> users = new HashMap<>();
         long consommationParJour = 0;
+        double consommationTotale = 0;
 
         do {
             System.out.println("-----------------------//veuillez selectionner votre choix//--------------");
@@ -189,15 +190,25 @@ public class Main {
                     int slectedId = scanner.nextInt();
                     scanner.nextLine();
 
-
-                            long consomationParSemaine = consommationParJour * 7;
-                            long consommationParMois = consomationParSemaine * 4;
-                            long consommationParAnnée = consommationParMois * 4;
-                            System.out.println("/------------------------------------------------------------------------/");
-                            System.out.println("/--Par Jour  -------- Par Semaine ------  Par Mois   --------  Par Année /");
-                            System.out.println("/--"+consommationParJour+"------" + consomationParSemaine +"----"+consommationParMois+"-----"+consommationParAnnée+"--/" );
+                    User utilisateur = users.get(slectedId);
+                    List<Consomation> consomations = utilisateur.getConsommations();
 
 
+
+                    for (Consomation consomation : consomations) {
+                        consommationTotale += consomation.getValueOfCarbon();
+                    }
+
+                    consommationParJour = (long) (consommationTotale / consomations.size());
+
+
+                    float consomationParSemaine = consommationParJour * 7;
+                    float consommationParMois = consomationParSemaine * 4;
+                    float consommationParAnnée = consommationParMois * 12;
+
+                    System.out.println("/------------------------------------------------------------------------/");
+                    System.out.println("/--Par Jour  -------- Par Semaine ------  Par Mois   --------  Par Année /");
+                    System.out.println("/--   " + consommationParJour + "    ------    " + consomationParSemaine + " ------   " + consommationParMois + " -----    " + consommationParAnnée + "--/");
                     break;
 
                 case 8:
