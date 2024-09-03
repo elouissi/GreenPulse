@@ -196,7 +196,7 @@ public class Main {
 
 
                     for (Consomation consomation : consomations) {
-                        consommationTotale += consomation.getValueOfCarbon();
+                        consommationTotale = consomation.getValueOfCarbon();
                     }
 
                     consommationParJour = (long) (consommationTotale / consomations.size());
