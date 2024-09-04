@@ -57,5 +57,6 @@ public class User {
     public List<Consomation> getConsommations() {
         return consomationList;
     }
+
 }
 

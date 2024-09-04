@@ -1,21 +1,22 @@
+import Util.Util;
+
 import javax.print.attribute.IntegerSyntax;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
 
         int choix;
+
         Scanner scanner = new Scanner(System.in);
         HashMap<Integer, User> users = new HashMap<>();
         long consommationParJour = 0;
         double consommationTotale = 0;
-
+        long difference =0;
         do {
             System.out.println("-----------------------//veuillez selectionner votre choix//--------------");
             System.out.println("1 - Ajouter un utilisateur");
@@ -64,7 +65,6 @@ public class Main {
                     scanner.nextLine();
 
 
-
                     System.out.println("entrer le nouveau nom");
                     String newName = scanner.nextLine();
 
@@ -73,14 +73,13 @@ public class Main {
                     scanner.nextLine();
 
 
-
-                    if( users.containsKey(updatedId) ){
+                    if (users.containsKey(updatedId)) {
                         User Newuser = new User(updatedId, newName, newAge);
-                        users.put(updatedId,Newuser);
+                        users.put(updatedId, Newuser);
 
                         System.out.println("l'utilisateur rst bien modifier");
 
-                    }else {
+                    } else {
                         System.out.println("l'id ne trouve pas!");
                     }
 
@@ -93,10 +92,10 @@ public class Main {
                     int deleteId = scanner.nextInt();
                     scanner.nextLine();
 
-                    if (users.containsKey(deleteId)){
+                    if (users.containsKey(deleteId)) {
                         users.remove(deleteId);
                         System.out.println("l'untilisteur a été bien supprimé");
-                    }else {
+                    } else {
                         System.out.println("l'id que que vous avez entrer est incorrect");
                     }
 
@@ -116,7 +115,11 @@ public class Main {
                     int selectId = scanner.nextInt();
                     scanner.nextLine();
 
+
                     if (users.containsKey(selectId)) {
+                        System.out.println("enter l'id du consommtion :");
+                        int ConsomationId = scanner.nextInt();
+                        scanner.nextLine();
                         System.out.println("Entrez la valeur du carbone en kg --|>");
                         int valeur = scanner.nextInt();
                         scanner.nextLine();
@@ -132,26 +135,40 @@ public class Main {
                             String inputE = scanner.nextLine();
                             LocalDate endDate = LocalDate.parse(inputE, format);
 
-                            long difference = ChronoUnit.DAYS.between(startDate, endDate);
+                            difference = ChronoUnit.DAYS.between(startDate, endDate);
 
-                            if (difference == 0) {
+
+                            if ( difference < 0) {
                                 System.out.println("Erreur : La date de début et la date de fin sont identiques.");
                             } else {
-                                  consommationParJour =  valeur / difference;
+                                consommationParJour = valeur / difference;
                                 System.out.println("Nombre de jours de différence: " + difference);
                                 System.out.println("Consommation par jour : " + consommationParJour);
+                                List<LocalDate> listDate = new ArrayList<>();
+                                 User utilisateur = users.get(selectId);
 
-                                Consomation consomation = new Consomation(startDate, endDate, valeur);
-                                User utilisateur = users.get(selectId);
-                                utilisateur.AddCarbon(consomation);
+                                for (Consomation co : utilisateur.getConsommations()) {
+                                    for (LocalDate date = co.getStartDate(); !date.isAfter(co.getEndDate()) ;date =  date.plusDays(1)){
+                                        listDate.add(date);
+                                    }
+                                }
+                                 if(Util.verifydates(startDate,endDate, listDate )){
+                                    Consomation consomation = new Consomation(ConsomationId,startDate, endDate, valeur);
+                                    utilisateur.AddCarbon(consomation);
+                                    System.out.println("La consommation de l'utilisateur a bien été ajoutée.");
 
-                                System.out.println("La consommation de l'utilisateur a bien été ajoutée.");
+                                }else {
+                                    System.out.println("s'il vous plait entre une autre date ");
+                                }
+
+
                             }
                         } catch (DateTimeParseException e) {
                             System.out.println("Erreur : Format de date incorrect. Veuillez entrer la date au format dd/MM/yyyy.");
                         } catch (ArithmeticException e) {
                             System.out.println("Erreur : Division par zéro lors du calcul de la consommation par jour.");
                         }
+
                     } else {
                         System.out.println("Erreur : ID d'utilisateur non trouvé.");
                     }
@@ -172,43 +189,74 @@ public class Main {
                         // Afficher les consommations de l'utilisateur
                         List<Consomation> consommations = utilisateur.getConsommations();
 
-                            System.out.println("Consommations de l'utilisateur :");
-                            for (Consomation consomation : consommations) {
-                                System.out.println(consomation.toString());
-                            }
-
-
-                        } else {
-                            System.out.println("Erreur : ID d'utilisateur non trouvé.");
+                        System.out.println("Consommations de l'utilisateur :");
+                        for (Consomation consomation : consommations) {
+                            System.out.println(consomation.toString());
                         }
+
+
+                    } else {
+                        System.out.println("Erreur : ID d'utilisateur non trouvé.");
+                    }
 
                     break;
 
                 case 7:
+                    System.out.println("--Type :  1");
+                    System.out.println("--Type :  2");
+                    int choixF = scanner.nextInt();
 
                     System.out.println("s'il vous plait choisir l'utilisateur que vous voulez");
-                    int slectedId = scanner.nextInt();
+                   int  slectedId = scanner.nextInt();
                     scanner.nextLine();
 
-                    User utilisateur = users.get(slectedId);
-                    List<Consomation> consomations = utilisateur.getConsommations();
+
+                    scanner.nextLine();
+                        switch (choixF){
+                            case 1:
 
 
-
-                    for (Consomation consomation : consomations) {
-                        consommationTotale = consomation.getValueOfCarbon();
-                    }
-
-                    consommationParJour = (long) (consommationTotale / consomations.size());
+                                User utilisateur = users.get(slectedId);
+                                List<Consomation> consomations = utilisateur.getConsommations();
 
 
-                    float consomationParSemaine = consommationParJour * 7;
-                    float consommationParMois = consomationParSemaine * 4;
-                    float consommationParAnnée = consommationParMois * 12;
+                                for (Consomation consomation : consomations) {
+                                    consommationTotale = consomation.getValueOfCarbon();
+                                }
 
-                    System.out.println("/------------------------------------------------------------------------/");
-                    System.out.println("/--Par Jour  -------- Par Semaine ------  Par Mois   --------  Par Année /");
-                    System.out.println("/--   " + consommationParJour + "    ------    " + consomationParSemaine + " ------   " + consommationParMois + " -----    " + consommationParAnnée + "--/");
+                                consommationParJour = (long) (consommationTotale / difference);
+
+
+                                float consomationParSemaine = consommationParJour * 7;
+                                float consommationParMois = consommationParJour * 30;
+                                float consommationParAnnée = consommationParJour * 365;
+
+                                System.out.println("/------------------------------------------------------------------------/");
+                                System.out.println("/--Par Jour  -------- Par Semaine ------  Par Mois   --------  Par Année /");
+                                System.out.println("/--   " + consommationParJour + "    ------    " + consomationParSemaine + " ------   " + consommationParMois + " -----    " + consommationParAnnée + "--/");
+                                break;
+                            case 2:
+
+
+                                User utilisa = users.get(slectedId);
+                                if (utilisa != null ) {
+                                    for (Consomation consomation : utilisa.getConsommations()) {
+                                        LocalDate stDate = consomation.getStartDate();
+                                        LocalDate edDate = consomation.getEndDate();
+
+                                            long differenceDays = ChronoUnit.DAYS.between(stDate, edDate) + 1;
+                                        float differenceConsomation = consomation.getValueOfCarbon() / differenceDays;
+                                        for (LocalDate date = stDate; date.isBefore(edDate); date = date.plusDays(1)) {
+                                            System.out.println(date + " la consomation par la journée :" + differenceConsomation);
+
+                                        }
+                                    }
+
+
+                                    break;
+                                }
+                        }
+
                     break;
 
                 case 8:
